@@ -1,0 +1,17 @@
+{
+  "name": "pesquisa-real-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase": "^12.8.0",
+    "firebase-admin": "^12.7.0",
+    "mercadopago": "^2.0.8",
+    "uuid": "^9.0.1"
+  }
+}
