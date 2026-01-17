@@ -2,7 +2,7 @@
 import { criarPix } from '../services/mercadoPago.service.js'
 import { db } from '../firebase/firestore.js'
 import { v4 as uuid } from 'uuid'
-import { collection, doc, setDoc } from 'firebase/firestore'
+import { collection, doc, updateDoc } from 'firebase/firestore'
 
 export async function gerarPix(req, res) {
   try {
