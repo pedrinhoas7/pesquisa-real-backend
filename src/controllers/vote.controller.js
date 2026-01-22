@@ -1,35 +1,42 @@
 import { db } from '../firebase/firestore.js'
-import { v4 as uuid } from 'uuid'
-import { collection, doc, setDoc } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  getDoc,
+  setDoc
+} from 'firebase/firestore'
 
 export async function Vote(req, res) {
   try {
     const { candidatoId, cpfHash, nickname, isPublicVote } = req.body
 
-    if (!candidatoId || !cpfHash || !nickname, !isPublicVote) {
+    if (!candidatoId || !cpfHash || !nickname || isPublicVote === undefined) {
       return res.status(400).json({ error: 'Dados obrigatórios ausentes' })
     }
 
-    const voteId = uuid()
+    const voteRef = doc(db, 'transactions', cpfHash)
 
-    await setDoc(
-      doc(collection(db, 'transactions'), voteId),
-      {
-        voteId,
-        candidatoId,
-        cpfHash,
-        nickname,
-        isPublicVote,
-        mpPaymentId: null,
-        externalReference: voteId,
-        status: 'NONE',
-        createdAt: new Date()
-      }
-    )
+    const existingVote = await getDoc(voteRef)
 
-    return res.json({
-      transactionId: voteId
+    if (existingVote.exists()) {
+      return res.status(409).json({
+        error: 'CPF já utilizou seu voto'
+      })
+    }
+
+    await setDoc(voteRef, {
+      voteId: cpfHash,
+      candidatoId,
+      cpfHash,
+      nickname,
+      isPublicVote,
+      mpPaymentId: null,
+      externalReference: cpfHash,
+      status: 'NONE',
+      createdAt: new Date()
     })
+
+    return res.json({ transactionId: cpfHash })
 
   } catch (err) {
     console.error('Erro ao computar voto:', err)
