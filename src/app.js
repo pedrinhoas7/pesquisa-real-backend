@@ -10,7 +10,9 @@ const app = express()
 app.use(cors({
     origin: [
         'http://localhost:5173', // Vite
-        'http://localhost:3000'  // se precisar
+        'http://localhost:3000',  // se precisar
+        "https://pesquisa-real-front.vercel.app",
+        "www.pesquisareal.org"
     ],
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
